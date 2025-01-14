@@ -5,10 +5,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/IanWill2k16/pokedexcli/internal/config"
 )
 
 func startRepl() {
 	scanner := bufio.NewScanner(os.Stdin)
+	cfg := config.NewConfig()
 
 	for {
 		fmt.Print("Pokedex > ")
@@ -21,7 +24,7 @@ func startRepl() {
 			continue
 		}
 		if cmd, ok := cliCommandMap[cleanedInput[0]]; ok {
-			cmd.callback(cliCommandMap)
+			cmd.callback(cliCommandMap, cfg)
 		} else {
 			fmt.Printf("Unknown command\n")
 		}
@@ -38,7 +41,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(map[string]cliCommand) error
+	callback    func(map[string]cliCommand, *config.Config) error
 }
 
 var cliCommandMap = map[string]cliCommand{
