@@ -1,32 +1,43 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/IanWill2k16/pokedexcli/internal/config"
+	"github.com/chzyer/readline"
 )
 
 func startRepl() {
-	scanner := bufio.NewScanner(os.Stdin)
 	cfg := config.NewConfig()
 
+	rl, err := readline.New("Pokedex > ")
+	if err != nil {
+		panic(err)
+	}
+	defer rl.Close()
+
 	for {
-		fmt.Print("Pokedex > ")
-		scanner.Scan()
-		userInput := scanner.Text()
+		userInput, err := rl.Readline()
+		if err != nil {
+			if err == readline.ErrInterrupt {
+				break
+			}
+			continue
+		}
+
 		cleanedInput := cleanInput(userInput)
 
 		if len(cleanedInput) == 0 {
 			fmt.Printf("Input cannot be empty\n")
 			continue
 		}
+
 		flag1 := ""
 		if len(cleanedInput) > 1 {
 			flag1 = cleanedInput[1]
 		}
+
 		if cmd, ok := cliCommandMap[cleanedInput[0]]; ok {
 			cmd.callback(cliCommandMap, cfg, flag1)
 		} else {
@@ -73,5 +84,20 @@ var cliCommandMap = map[string]cliCommand{
 		name:        "explore",
 		description: "Displays list of Pokemon found in a provided area",
 		callback:    explore,
+	},
+	"catch": {
+		name:        "catch",
+		description: "Attempts to catch a pokemon",
+		callback:    catch,
+	},
+	"inspect": {
+		name:        "inspect",
+		description: "Shows the stats for your caught Pokemon",
+		callback:    inspect,
+	},
+	"pokedex": {
+		name:        "pokedex",
+		description: "Shows all of your caught Pokemon",
+		callback:    pokedex,
 	},
 }
