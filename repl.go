@@ -23,8 +23,12 @@ func startRepl() {
 			fmt.Printf("Input cannot be empty\n")
 			continue
 		}
+		flag1 := ""
+		if len(cleanedInput) > 1 {
+			flag1 = cleanedInput[1]
+		}
 		if cmd, ok := cliCommandMap[cleanedInput[0]]; ok {
-			cmd.callback(cliCommandMap, cfg)
+			cmd.callback(cliCommandMap, cfg, flag1)
 		} else {
 			fmt.Printf("Unknown command\n")
 		}
@@ -41,7 +45,7 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(map[string]cliCommand, *config.Config) error
+	callback    func(map[string]cliCommand, *config.Config, string) error
 }
 
 var cliCommandMap = map[string]cliCommand{
@@ -64,5 +68,10 @@ var cliCommandMap = map[string]cliCommand{
 		name:        "mapb",
 		description: "Displays the previous list of areas",
 		callback:    listPrevArea,
+	},
+	"explore": {
+		name:        "explore",
+		description: "Displays list of Pokemon found in a provided area",
+		callback:    explore,
 	},
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/IanWill2k16/pokedexcli/internal/config"
 )
 
-func listHelp(registry map[string]cliCommand, cfg *config.Config) error {
+func listHelp(registry map[string]cliCommand, cfg *config.Config, area string) error {
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()

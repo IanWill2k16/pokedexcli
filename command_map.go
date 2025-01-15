@@ -7,7 +7,7 @@ import (
 	"github.com/IanWill2k16/pokedexcli/internal/pokeapi"
 )
 
-func listNextArea(cliCommandMap map[string]cliCommand, cfg *config.Config) error {
+func listNextArea(cliCommandMap map[string]cliCommand, cfg *config.Config, area string) error {
 	res, err := pokeapi.ListArea(cfg.NextUrl, cfg)
 	if err != nil {
 		return err
@@ -19,7 +19,7 @@ func listNextArea(cliCommandMap map[string]cliCommand, cfg *config.Config) error
 	return nil
 }
 
-func listPrevArea(cliCommandMap map[string]cliCommand, cfg *config.Config) error {
+func listPrevArea(cliCommandMap map[string]cliCommand, cfg *config.Config, area string) error {
 	if cfg.PrevUrl == "" {
 		fmt.Print("You're on the first page\n")
 	}
